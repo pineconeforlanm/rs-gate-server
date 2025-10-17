@@ -9,6 +9,12 @@ readme = "README.md"
 repository = "https://github.com/pineconeforlanm/rs-gate-server.git"
 authors = ["lanmeng <pineconeforlanm@outlook.com>"]
 
+[workspace]
+resolver = "3"
+members = [
+    "migration"
+]
+
 [profile.release]
 opt-level = 3
 lto = true
@@ -74,3 +80,5 @@ tonic-prost = { version = "0.14.1" }
 redis = { version = "0.32.7", features = ["tokio-comp", "tokio-rustls-comp"] }
 r2d2_redis = { version = "0.14.0" }
 r2d2 = { version = "0.8.10" }
+chrono = "0.4.42"
+serde_json = "1.0.145"
