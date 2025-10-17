@@ -1,0 +1,12 @@
+# Rustfmt configuration for Rust 2024 edition
+edition = "2024"
+
+# Maximum line width
+max_width = 100
+
+# Indentation
+hard_tabs = false      # 使用空格而不是 Tab
+tab_spaces = 2         # 每个缩进层级 4 个空格
+
+# Single line expressions
+merge_derives = true          # 相同属性尽量合并

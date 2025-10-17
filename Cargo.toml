@@ -1,0 +1,76 @@
+[package]
+description = "web starter: A minimal web application starter template using Actix-web, Diesel, and Serde"
+name = "rs-gate-server"
+version = "0.1.0"
+edition = "2024"
+keywords = ["web", "actix-web", "diesel", "serde"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/pineconeforlanm/rs-gate-server.git"
+authors = ["lanmeng <pineconeforlanm@outlook.com>"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 8
+strip = true
+debug = false
+
+[profile.bench]
+opt-level = 3
+
+[profile.test]
+opt-level = 0
+
+[dependencies]
+anyhow = { version = "1.0.100" }
+axum = { version = "0.8.6", features = ["macros"] }
+axum-valid = { version = "0.24.0", features = ["full_validator"] }
+bcrypt = { version = "0.17.1" }
+bytesize = { version = "2.1.0" }
+config = { version = "0.15.18", features = ["yaml"] }
+idgenerator = { version = "2.0.0" }
+jsonwebtoken = { version = "10.0.0", features = ["rust_crypto"] }
+num_cpus = { version = "1.17.0" }
+regex = { version = "1.12.2" }
+rust-embed = { version = "8.7.2", features = [
+    "axum",
+    "axum-ex",
+    "tokio",
+    "compression",
+    "debug-embed",
+    "include-exclude",
+    "include-flate",
+    "interpolate-folder-path",
+    "mime-guess"
+] }
+sea-orm = { version = "1.1.17", features = [
+    "with-chrono",
+    "debug-print",
+    "sqlx-postgres",
+    "with-rust_decimal",
+    "runtime-tokio"
+] }
+serde = { version = "1.0.228", features = ["derive"] }
+thiserror = { version = "2.0.17" }
+tokio = { version = "1.48.0", features = ["full"] }
+tower-http = { version = "0.6.6", features = [
+    "trace",
+    "timeout",
+    "limit",
+    "cors",
+    "normalize-path",
+    "auth",
+    "compression-full"
+] }
+tracing = { version = "0.1.41", features = ["async-await"] }
+tracing-subscriber = { version = "0.3.20", features = ["env-filter", "chrono"] }
+uuid = { version = "1.18.1", features = ["v4"] }
+validator = { version = "0.20.0", features = ["derive"] }
+xid = { version = "1.1.1" }
+tonic = { version = "0.14.1" }
+prost = { version = "0.14.1" }
+tonic-prost = { version = "0.14.1" }
+redis = { version = "0.32.7", features = ["tokio-comp", "tokio-rustls-comp"] }
+r2d2_redis = { version = "0.14.0" }
+r2d2 = { version = "0.8.10" }
