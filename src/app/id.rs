@@ -24,6 +24,7 @@ pub async fn init() -> ApiResult<()> {
   Ok(())
 }
 
+#[allow(dead_code)]
 pub fn next_id() -> String {
   IdInstance::next_id().to_string()
 }

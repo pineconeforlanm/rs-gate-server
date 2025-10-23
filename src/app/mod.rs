@@ -1,50 +1,48 @@
 use crate::config;
-use axum::{Router, debug_handler, routing};
+use axum::Router;
 pub use errors::ApiResult;
-use tokio::net::TcpListener;
+pub mod auth;
+pub mod common;
 mod database;
+pub mod enumeration;
 pub mod errors;
-mod id;
+pub mod id;
+mod json;
+mod latency;
 pub mod logger;
-mod response;
+pub mod middleware;
+pub mod path;
+mod query;
+pub mod response;
+mod serde;
+mod server;
+pub mod utils;
+pub mod valid;
+pub mod validation;
 
-use crate::entity::prelude::*;
-use crate::entity::sys_user;
-use axum::extract::State;
-use axum::response::IntoResponse;
-use sea_orm::Condition;
 use sea_orm::prelude::*;
 
-pub async fn run() -> ApiResult<()> {
+#[derive(Clone)]
+pub struct AppState {
+  pub db: DatabaseConnection,
+}
+
+impl AppState {
+  pub fn new(db: DatabaseConnection) -> Self {
+    Self { db }
+  }
+}
+
+pub async fn run(router: Router<AppState>) -> ApiResult<()> {
   logger::init().await?;
   id::init().await?;
   tracing::info!("Starting app server...");
+
   let db = database::init().await?;
+  let state = AppState::new(db);
+  let server = server::Server::new(config::get().server());
 
-  let router = Router::new()
-    .route("/users", routing::get(query_users))
-    .with_state(db);
-
-  let address =
-    std::net::SocketAddrV4::new(std::net::Ipv4Addr::LOCALHOST, config::get().server().port());
-  let listener = TcpListener::bind(address).await?;
-  tracing::info!("Listening on {}", address);
-
-  axum::serve(listener, router).await?;
+  server.start(state, router).await?;
 
   Ok(())
-}
-
-#[debug_handler]
-async fn query_users(State(db): State<DatabaseConnection>) -> ApiResult<impl IntoResponse> {
-  let users = SysUser::find()
-    .filter(
-      Condition::all()
-        .add(sys_user::Column::Gender.eq("Male"))
-        .add(sys_user::Column::Name.starts_with("B")),
-    )
-    .all(&db)
-    .await?;
-
-  Ok(axum::Json(users))
 }

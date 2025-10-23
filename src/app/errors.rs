@@ -1,12 +1,10 @@
 use crate::app::response::ApiResponse;
 use axum::extract::rejection::{JsonRejection, PathRejection, QueryRejection};
 use axum::{
-  Json,
   http::StatusCode,
   response::{IntoResponse, Response},
 };
 use axum_valid::ValidRejection;
-use serde_json::json;
 use std::error::Error;
 
 #[derive(Debug, thiserror::Error)]
